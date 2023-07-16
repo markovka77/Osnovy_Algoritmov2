@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class OsnovyAlgoritmov2Application {
 
     public static void main(String[] args) {
+
         SpringApplication.run(OsnovyAlgoritmov2Application.class, args);
     }
+
 
 }

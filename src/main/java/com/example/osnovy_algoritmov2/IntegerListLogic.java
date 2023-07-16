@@ -1,17 +1,18 @@
 package com.example.osnovy_algoritmov2;
 
-import java.security.PublicKey;
 import java.util.Arrays;
+import java.util.Random;
+
 
 public class IntegerListLogic implements IntegerList {
-    Integer[] nums = new Integer[12];
-    int size = nums.length;
+    public static Integer[] nums = new Integer[100_000];
+    int size = nums.length-1;
 
     @Override
     public Integer add(Integer item) {
         sizeValidate();
         validate(item);
-        nums[size++] = item;
+        nums[size--] = item;
         return item;
     }
 
@@ -35,7 +36,7 @@ public class IntegerListLogic implements IntegerList {
     public Integer set(int index, Integer item) {
         validateIndex(index);
         validate(item);
-        nums[index] = Integer.valueOf(item);
+        nums[index] = item;
         return item;
     }
 
@@ -78,7 +79,9 @@ public class IntegerListLogic implements IntegerList {
 
     @Override
     public boolean contains(Integer item) {
-        return indexOf(item) != -1;
+        Integer[] numsCopy = toArray();
+        sortInsertion(numsCopy);
+       return binarySearch(numsCopy,item);
     }
 
     @Override
@@ -154,6 +157,55 @@ public class IntegerListLogic implements IntegerList {
             throw new InvalidIndexException();
         }
     }
+
+    public static void randomArray() {
+        Random rand = new Random();
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = rand.nextInt(100_000);
+        }
+    }
+
+
+    private static void swapElements(Integer[] arr, int indexA, int indexB) {
+        int tmp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = tmp;
+    }
+
+
+    private void sortInsertion(Integer[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && arr[j - 1] >= temp) {
+                arr[j] = arr[j - 1];
+                j--;
+
+            }
+            arr[j] = temp;
+        }
+    }
+    private boolean binarySearch(Integer[] nums,Integer item){
+        int min = 0;
+        int max = nums.length - 1;
+
+        while (min <= max) {
+            int mid = (min + max) / 2;
+
+            if (item == nums[mid]) {
+                return true;
+            }
+
+            if (item < nums[mid]) {
+                max = mid - 1;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return false;
+    }
+
+
 
 
 }
