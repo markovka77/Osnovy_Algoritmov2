@@ -10,7 +10,7 @@ public class IntegerListLogic implements IntegerList {
 
     @Override
     public Integer add(Integer item) {
-        sizeValidate();
+        growIfNeeded();
         validate(item);
         nums[size--] = item;
         return item;
@@ -20,7 +20,7 @@ public class IntegerListLogic implements IntegerList {
     public Integer add(int index, Integer item) {
         validate(item);
         validateIndex(index);
-        sizeValidate();
+        growIfNeeded();
         if (index == size) {
             nums[size++] = item;
             return item;
@@ -133,6 +133,10 @@ public class IntegerListLogic implements IntegerList {
 
     }
 
+    public void sort(Integer[] arr){
+        quickSort(arr,0, arr.length-1);
+    }
+
     @Override
     public Integer[] toArray() {
         return Arrays.copyOf(nums, size);
@@ -146,9 +150,9 @@ public class IntegerListLogic implements IntegerList {
         }
     }
 
-    private void sizeValidate() {
+    private void growIfNeeded() {
         if (size == nums.length) {
-            throw new StorageIsFullException();
+            grow();
         }
     }
 
@@ -204,6 +208,43 @@ public class IntegerListLogic implements IntegerList {
         }
         return false;
     }
+
+    private void grow(){
+        nums = new Integer [nums.length + nums.length/2];
+    }
+
+    private static void swapElements(int[] arr, int i1, int i2) {
+        int temp = arr[i2];
+        arr[i1] = arr[i2];
+        arr[i2] = temp;
+    }
+
+
+    public static void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
+        }
+    }
+
+    private static int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+
 
 
 
